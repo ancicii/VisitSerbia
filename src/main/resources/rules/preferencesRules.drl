@@ -1,0 +1,283 @@
+package rules;
+import sbnz.visitserbia.DTOs.AnswerDTO
+import sbnz.visitserbia.DTOs.ResponsesDTO
+import sbnz.visitserbia.model.AttractionType
+import sbnz.visitserbia.model.Attraction
+
+rule "Selected answer is NATURE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'NATURE', questionId == 1)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.NATURE);
+        $response.addAttractionType(AttractionType.VIEWPOINT);
+        $response.addAttractionType(AttractionType.CAVE);
+        $response.addAttractionType(AttractionType.PARK);
+        $response.addAttractionType(AttractionType.MOUNTAIN);
+        $response.addAttractionType(AttractionType.ACTIVITY);
+        $response.removeAttractionType(AttractionType.NIGHT_CLUB);
+        $response.removeAttractionType(AttractionType.CAFFE);
+
+end
+
+rule "Selected answer is CITY"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'CITY', questionId == 1)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.PARK);
+        $response.addAttractionType(AttractionType.NIGHT_CLUB);
+        $response.addAttractionType(AttractionType.CAFFE);
+        $response.removeAttractionType(AttractionType.NATURE);
+        $response.removeAttractionType(AttractionType.VIEWPOINT);
+        $response.removeAttractionType(AttractionType.CAVE);
+        $response.removeAttractionType(AttractionType.MOUNTAIN);
+        $response.removeAttractionType(AttractionType.VILLAGE);
+        $response.removeAttractionType(AttractionType.ACTIVITY);
+end
+
+rule "Selected answer is ANYWHERE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'ANYTHING', questionId == 1)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.PARK);
+        $response.addAttractionType(AttractionType.NIGHT_CLUB);
+        $response.addAttractionType(AttractionType.CAFFE);
+        $response.addAttractionType(AttractionType.NATURE);
+        $response.addAttractionType(AttractionType.VIEWPOINT);
+        $response.addAttractionType(AttractionType.CAVE);
+        $response.addAttractionType(AttractionType.MOUNTAIN);
+        $response.addAttractionType(AttractionType.VILLAGE);
+        $response.addAttractionType(AttractionType.ACTIVITY);
+end
+
+rule "Selected answer is FAST FOOD"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'FAST_FOOD', questionId == 2)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
+        $response.removeAttractionType(AttractionType.RESTAURANT);
+        $response.addAttractionType(AttractionType.FAST_FOOD);
+
+end
+
+rule "Selected answer is TRADITIONAL KITCHEN RESTAURANT"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'TRADITIONAL_KITCHEN', questionId == 2)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.FAST_FOOD);
+        $response.removeAttractionType(AttractionType.RESTAURANT);
+        $response.addAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
+end
+
+rule "Selected answer is RESTAURANTS"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'RESTAURANTS', questionId == 2)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.RESTAURANT);
+        $response.removeAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
+        $response.removeAttractionType(AttractionType.FAST_FOOD);
+
+end
+
+rule "Selected answer for food is ANYWHERE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'ANYTHING', questionId == 2)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.RESTAURANT);
+        $response.addAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
+        $response.addAttractionType(AttractionType.FAST_FOOD);
+end
+
+rule "Selected answer INTERESTED IN CULTURE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'INTERESTED_IN_CULTURE', questionId == 3)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.HISTORICAL);
+end
+
+rule "Selected answer NOT INTERESTED IN CULTURE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'NOT_INTERESTED_IN_CULTURE', questionId == 3)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.HISTORICAL);
+end
+
+rule "Selected answer INTERESTED IN SHOPPING"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'SHOPPING_YES', questionId == 6)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.SHOPPING_MALL);
+end
+
+rule "Selected answer NOT INTERESTED IN SHOPPING"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'SHOPPING_NO', questionId == 6)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.SHOPPING_MALL);
+end
+
+rule "Selected answer INTERESTED IN CINEMA AND THEATRE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'CINEMA_AND_THEATRE_YES', questionId == 5)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.CINEMA);
+        $response.addAttractionType(AttractionType.THEATRE);
+end
+
+rule "Selected answer NOT INTERESTED IN CINEMA AND THEATRE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'CINEMA_AND_THEATRE_NO', questionId == 5)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.CINEMA);
+        $response.removeAttractionType(AttractionType.THEATRE);
+end
+
+rule "Selected answer LIKE ANIMALS"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'ANIMALS_YES', questionId == 7)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.ZOO);
+end
+
+rule "Selected answer DON'T LIKE ANIMALS"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'ANIMALS_NO', questionId == 7)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.ZOO);
+end
+
+rule "Selected answer LIKE WATER"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'WATER_YES', questionId == 8)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.SPA_RESORT);
+        $response.addAttractionType(AttractionType.RIVER);
+        $response.addAttractionType(AttractionType.LAKE);
+end
+
+rule "Selected answer DON'T LIKE WATER"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'WATER_NO', questionId == 8)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.SPA_RESORT);
+        $response.removeAttractionType(AttractionType.RIVER);
+        $response.removeAttractionType(AttractionType.LAKE);
+end
+
+rule "Selected answer INTERESTED IN MONASTERIES"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'MONASTERIES_YES', questionId == 9)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.MONASTERY);
+        $response.addAttractionType(AttractionType.CHURCH);
+        $response.addAttractionType(AttractionType.MOSQUE);
+end
+
+rule "Selected answer NOT INTERESTED IN MONASTERIES"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'MONASTERIES_NO', questionId == 9)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.MONASTERY);
+        $response.removeAttractionType(AttractionType.CHURCH);
+        $response.removeAttractionType(AttractionType.MOSQUE);
+end
+
+rule "Selected answer INTERESTED IN ART"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'ART_YES', questionId == 4)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.MUSEUM);
+        $response.addAttractionType(AttractionType.ART_GALLERY);
+end
+
+rule "Selected answer NOT INTERESTED IN ART"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'ART_NO', questionId == 4)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.MUSEUM);
+        $response.removeAttractionType(AttractionType.ART_GALLERY);
+end
+
+rule "Selected answer TO RELAX"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'REST_YES', questionId == 10)
+        $response: ResponsesDTO()
+    then
+        $response.removeAttractionType(AttractionType.NIGHT_CLUB);
+        $response.removeAttractionType(AttractionType.ACTIVITY);
+end
+
+rule "Selected answer TO BE ACTIVE"
+    agenda-group "questions"
+    no-loop
+    when
+        $answer: AnswerDTO(preference == 'REST_NO', questionId == 10)
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.NIGHT_CLUB);
+        $response.addAttractionType(AttractionType.ACTIVITY);
+end

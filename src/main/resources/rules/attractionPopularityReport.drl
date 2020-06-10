@@ -1,0 +1,54 @@
+package rules;
+import java.util.ArrayList;
+import sbnz.visitserbia.model.RegisteredUser
+import sbnz.visitserbia.DTOs.AttractionPopularityReportDTO
+import sbnz.visitserbia.model.Result
+import sbnz.visitserbia.model.Attraction
+
+global ArrayList<Result> allResults;
+global ArrayList<Attraction> allAttractions;
+
+rule "Least popular attractions"
+    agenda-group "attraction-popularity-report"
+    when
+        $attractions: AttractionPopularityReportDTO()
+        $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
+                       from allAttractions,
+                       average($timesRecommended))
+
+        $leastPopular: ArrayList() from collect (
+          Attraction(timesRecommended < $mean) from allAttractions)
+    then
+        $attractions.setAttractions($leastPopular);
+        delete($attractions);
+end
+
+rule "Medium popular attractions"
+    agenda-group "attraction-popularity-report"
+    when
+        $attractions: AttractionPopularityReportDTO()
+        $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
+                       from allAttractions,
+                       average($timesRecommended))
+
+        $mediumPopular: ArrayList() from collect (
+          Attraction(timesRecommended >= $mean, timesRecommended < 2*$mean) from allAttractions)
+    then
+        $attractions.setAttractions($mediumPopular);
+        delete($attractions);
+end
+
+rule "Most popular attractions"
+    agenda-group "attraction-popularity-report"
+    when
+        $attractions: AttractionPopularityReportDTO()
+        $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
+                       from allAttractions,
+                       average($timesRecommended))
+
+        $mostPopular: ArrayList() from collect (
+          Attraction(timesRecommended >= 2*$mean) from allAttractions)
+    then
+        $attractions.setAttractions($mostPopular);
+        delete($attractions);
+end

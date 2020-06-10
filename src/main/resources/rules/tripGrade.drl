@@ -1,0 +1,33 @@
+package rules;
+import sbnz.visitserbia.DTOs.ResultDTO
+import sbnz.visitserbia.model.TripGrade
+
+rule "Not fulfilled days"
+    agenda-group "trip-grade"
+    when
+        $result: ResultDTO(timeByDay < 360)
+    then
+        modify($result){
+            setTripGrade(TripGrade.NOT_FULFILLED_DAY)
+        }
+end
+
+rule "Medium fulfilled days"
+    agenda-group "trip-grade"
+    when
+        $result: ResultDTO(timeByDay >= 360, timeByDay < 540)
+    then
+        modify($result){
+            setTripGrade(TripGrade.MEDIUM_FULFILLED_DAY)
+        }
+end
+
+rule "Totally fulfilled days"
+    agenda-group "trip-grade"
+    when
+        $result: ResultDTO(timeByDay >= 540)
+    then
+        modify($result){
+            setTripGrade(TripGrade.TOTALLY_FULFILLED_DAY)
+    }
+end
