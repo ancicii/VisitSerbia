@@ -7,7 +7,7 @@ rule "Low Budget Trip"
     agenda-group "budget-rules"
     when
         $result: ResultDTO()
-        $response: ResponsesDTO(tripBudget/numberOfTravelers < 1000)
+        $response: ResponsesDTO(tripBudget/numberOfTravelers/numberOfDays < 1000)
     then
         modify($result){setTripBudget(Budget.LOW)}
 end
@@ -16,7 +16,7 @@ rule "Medium Budget Trip"
     agenda-group "budget-rules"
     when
         $result: ResultDTO()
-        $response: ResponsesDTO(tripBudget/numberOfTravelers >= 1000 && tripBudget/numberOfTravelers < 3000)
+        $response: ResponsesDTO(tripBudget/numberOfTravelers/numberOfDays >= 1000 && tripBudget/numberOfTravelers < 3000)
     then
         modify($result){setTripBudget(Budget.MEDIUM)}
 end
@@ -26,7 +26,7 @@ rule "High Budget Trip"
     agenda-group "budget-rules"
     when
         $result: ResultDTO()
-        $response: ResponsesDTO(tripBudget/numberOfTravelers >= 3000)
+        $response: ResponsesDTO(tripBudget/numberOfTravelers/numberOfDays >= 3000)
     then
         modify($result){setTripBudget(Budget.HIGH)}
 end
