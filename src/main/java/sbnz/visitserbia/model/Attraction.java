@@ -1,5 +1,7 @@
 package sbnz.visitserbia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,25 +16,40 @@ public class Attraction {
     private AttractionType attractionType;
     private Double timeToSpend;
     private Budget attractionBudget;
-    private PartOfSerbia partOfSerbia;
     private Season seasonToVisit;
-    private String cityName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    @JsonIgnore
+    private City city;
     private Integer timesRecommended;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] image;
 
     public Attraction() {
         this.timesRecommended = 0;
     }
+
     public Attraction(String name, AttractionType attractionType, Double timeToSpend
-            , Budget moneyToSpend, PartOfSerbia partOfSerbia, Season seasonToVisit, String cityName, Integer timesRecommended) {
+            , Budget moneyToSpend, Season seasonToVisit, City city, Integer timesRecommended, byte[] image) {
         this.name = name;
         this.attractionType = attractionType;
         this.timeToSpend = timeToSpend;
         this.attractionBudget = moneyToSpend;
-        this.partOfSerbia = partOfSerbia;
         this.seasonToVisit = seasonToVisit;
-        this.cityName = cityName;
+        this.city = city;
         this.timesRecommended = timesRecommended;
+        this.image = image;
 
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Integer getTimesRecommended() {
@@ -41,14 +58,6 @@ public class Attraction {
 
     public void setTimesRecommended(Integer timesRecommended) {
         this.timesRecommended = timesRecommended;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
     }
 
     public AttractionType getAttractionType() {
@@ -107,11 +116,11 @@ public class Attraction {
         this.attractionBudget = moneyToSpend;
     }
 
-    public PartOfSerbia getPartOfSerbia() {
-        return partOfSerbia;
+    public City getCity() {
+        return city;
     }
 
-    public void setPartOfSerbia(PartOfSerbia partOfSerbia) {
-        this.partOfSerbia = partOfSerbia;
+    public void setCity(City city) {
+        this.city = city;
     }
 }

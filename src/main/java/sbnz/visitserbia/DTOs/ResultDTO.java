@@ -3,6 +3,7 @@ package sbnz.visitserbia.DTOs;
 import org.w3c.dom.Attr;
 import sbnz.visitserbia.model.Attraction;
 import sbnz.visitserbia.model.Budget;
+import sbnz.visitserbia.model.City;
 import sbnz.visitserbia.model.TripGrade;
 
 import java.util.ArrayList;
@@ -55,10 +56,10 @@ public class ResultDTO {
     }
 
     public Integer getNumberOfCities() {
-        ArrayList<String> foundCities = new ArrayList<>();
+        ArrayList<City> foundCities = new ArrayList<>();
         for(Attraction a: this.attractionList){
-            if (!foundCities.contains(a.getCityName())){
-                foundCities.add(a.getCityName());
+            if (!foundCities.contains(a.getCity())){
+                foundCities.add(a.getCity());
             }
         }
         return foundCities.size();

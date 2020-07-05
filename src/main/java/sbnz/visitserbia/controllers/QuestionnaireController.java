@@ -47,4 +47,11 @@ public class QuestionnaireController {
         questionnaireService.answer(answer, responsesDTO);
     }
 
+    @PostMapping(value = "sendAnswers")
+    @Secured("ROLE_USER")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void sendAnswers(@Valid @RequestBody List<Integer> answers) {
+        questionnaireService.sendAnswers(answers);
+    }
+
 }

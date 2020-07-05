@@ -2,12 +2,14 @@ package sbnz.visitserbia.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import sbnz.visitserbia.model.RegisteredUser;
+import sbnz.visitserbia.model.User;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<RegisteredUser, Long> {
-	RegisteredUser findByEmail(String email);
+public interface UserRepository extends JpaRepository<User, Long> {
+	User findByEmail(String email);
 
-	List<RegisteredUser> findByIsVerifiedFalse();
+	List<User> findByIsVerifiedFalse();
 
+	RegisteredUser findRegUserByEmail(String email);
 }

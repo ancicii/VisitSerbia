@@ -5,7 +5,7 @@ import sbnz.visitserbia.model.TripGrade
 rule "Not fulfilled days"
     agenda-group "trip-grade"
     when
-        $result: ResultDTO(timeByDay < 360)
+        $result: ResultDTO(timeByDay < 240)
     then
         modify($result){
             setTripGrade(TripGrade.NOT_FULFILLED_DAY)
@@ -15,7 +15,7 @@ end
 rule "Medium fulfilled days"
     agenda-group "trip-grade"
     when
-        $result: ResultDTO(timeByDay >= 360, timeByDay < 540)
+        $result: ResultDTO(timeByDay >= 240, timeByDay < 540)
     then
         modify($result){
             setTripGrade(TripGrade.MEDIUM_FULFILLED_DAY)

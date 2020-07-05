@@ -1,0 +1,57 @@
+.card.card-cascade .view.gradient-card-header {
+  padding: 1rem 1rem;
+  text-align: center;
+}
+
+.card.card-cascade h3
+{
+  margin-bottom: 0px;
+}
+.card.card-cascade h4
+{
+  margin-bottom: 0px;
+}
+
+.purple-gradient {
+  background: -webkit-linear-gradient(30deg, #b127fc, #8a00c1);
+  background: linear-gradient(20deg, #b127fc, #8a00c1);
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.card.card-cascade.view {
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15), 0 3px 12px 0 rgba(0, 0, 0, 0.15);
+}
+
+.main-div{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  color: red;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
+  justify-content: center;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+
+#example-radio-group-label{
+  text-align: left;
+}
+
+.divclass{
+  float:left;
+}

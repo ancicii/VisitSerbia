@@ -26,7 +26,7 @@ public class EmailService {
         mailMessage.setSubject("Complete registration");
         mailMessage.setFrom(emailAddress);
         mailMessage.setText(String.format("Dear %s %s,%nTo confirm your account please click here: %n"
-                + "http://" + url + "/api/verify-account?token=" + verificationToken.getToken(), registeredUser.getFirstName(), registeredUser.getLastName()));
+                + "http://" + url + "/verify-account?token=" + verificationToken.getToken(), registeredUser.getFirstName(), registeredUser.getLastName()));
         javaMailSender.send(mailMessage);
 
     }

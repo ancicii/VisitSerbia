@@ -1,55 +1,58 @@
 package sbnz.visitserbia.DTOs;
 
-import sbnz.visitserbia.model.Attraction;
-import sbnz.visitserbia.model.AttractionType;
-import sbnz.visitserbia.model.Budget;
-import sbnz.visitserbia.model.PartOfSerbia;
+import sbnz.visitserbia.model.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ResponsesDTO {
 
     private List<AttractionType> attractionTypes;
-    private double tripBudget;
+    private Double tripBudget;
     private PartOfSerbia partOfSerbia;
     private Integer numberOfDays;
     private Integer numberOfTravelers;
+    private Date startDate;
+    private Date endDate;
 
-    public ResponsesDTO(List<AttractionType> attractionTypes, double tripBudget, PartOfSerbia partOfSerbia,
-                        Integer numberOfDays, Integer numberOfTravelers) {
+    public ResponsesDTO(List<AttractionType> attractionTypes, Double tripBudget, PartOfSerbia partOfSerbia, Integer numberOfDays, Integer numberOfTravelers, Date startDate, Date endDate) {
         this.attractionTypes = attractionTypes;
         this.tripBudget = tripBudget;
         this.partOfSerbia = partOfSerbia;
         this.numberOfDays = numberOfDays;
         this.numberOfTravelers = numberOfTravelers;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public ResponsesDTO() {
         this.attractionTypes = new ArrayList<>();
     }
 
+    public void addAttractionType(AttractionType attractionType){
+        if(!this.getAttractionTypes().contains(attractionType)){
+            this.getAttractionTypes().add(attractionType);        }
+
+    }
+
+    public void removeAttractionType(AttractionType attractionType){
+        this.getAttractionTypes().remove(attractionType);
+    }
+
     public List<AttractionType> getAttractionTypes() {
         return attractionTypes;
-    }
-
-    public Integer getNumberOfTravelers() {
-        return numberOfTravelers;
-    }
-
-    public void setNumberOfTravelers(Integer numberOfTravelers) {
-        this.numberOfTravelers = numberOfTravelers;
     }
 
     public void setAttractionTypes(List<AttractionType> attractionTypes) {
         this.attractionTypes = attractionTypes;
     }
 
-    public double getTripBudget() {
+    public Double getTripBudget() {
         return tripBudget;
     }
 
-    public void setTripBudget(double tripBudget) {
+    public void setTripBudget(Double tripBudget) {
         this.tripBudget = tripBudget;
     }
 
@@ -69,13 +72,27 @@ public class ResponsesDTO {
         this.numberOfDays = numberOfDays;
     }
 
-    public void addAttractionType(AttractionType attractionType){
-        if(!this.getAttractionTypes().contains(attractionType)) {
-            this.getAttractionTypes().add(attractionType);
-        }
+    public Integer getNumberOfTravelers() {
+        return numberOfTravelers;
     }
 
-    public void removeAttractionType(AttractionType attractionType){
-        this.getAttractionTypes().remove(attractionType);
+    public void setNumberOfTravelers(Integer numberOfTravelers) {
+        this.numberOfTravelers = numberOfTravelers;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

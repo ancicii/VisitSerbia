@@ -1,0 +1,16 @@
+<mat-toolbar color="primary" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
+  <span>
+    <button mat-button routerLink="/dashboard/home">Home</button>
+    <button *ngIf="getRole != 'NO_ROLE'" routerLink="/dashboard/attractions" mat-button>Attractions</button>
+    <button *ngIf="getRole == 'ROLE_ADMIN'" routerLink="/dashboard/addAttraction" mat-button>Add Attraction</button>
+    <button *ngIf="getRole == 'ROLE_USER'" routerLink="/dashboard/myTrips" mat-button>My Trips</button>
+    <button *ngIf="getRole == 'ROLE_USER'" routerLink="/dashboard/planTrip" mat-button>Plan Trip</button>
+  </span>
+  <span fxLayoutAlign="right">
+    <button *ngIf="getRole == 'ROLE_USER'" routerLink="/dashboard/myProfile" mat-button>My Profile</button>
+    <button *ngIf="getRole == 'NO_ROLE'" routerLink="/login" mat-button>Login</button>
+    <button *ngIf="getRole == 'NO_ROLE'" routerLink="/register" mat-button>Register</button>
+    <button *ngIf="getRole != 'NO_ROLE'" (click)="logOut()" mat-button>Logout</button>
+
+  </span>
+</mat-toolbar>

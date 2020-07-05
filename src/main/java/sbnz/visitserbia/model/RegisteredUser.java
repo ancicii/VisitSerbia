@@ -21,8 +21,13 @@ public class RegisteredUser extends User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Result> results;
 
+    @ElementCollection
+    @CollectionTable(name = "user_answers", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "answer")
+    private List<Integer> myAnswers;
+
     public RegisteredUser(Long id, String firstName, String lastName, String password, String email, Boolean isVerified,
-                          Integer years, MaritalStatus maritalStatus, Integer numberOfKids) {
+                          Integer years, MaritalStatus maritalStatus, Integer numberOfKids, List<Integer> myAnswers) {
         super(id, firstName, lastName, password, email, isVerified);
         Authority a = new Authority();
         a.setType(UserType.ROLE_USER);
@@ -32,11 +37,21 @@ public class RegisteredUser extends User {
         this.numberOfKids = numberOfKids;
         this.preferences =  new HashSet<>();
         this.results = new ArrayList<>();
+        this.myAnswers = new ArrayList<>();
     }
 
     public RegisteredUser() {
         this.preferences = new HashSet<>();
         this.results = new ArrayList<>();
+        this.myAnswers = new ArrayList<>();
+    }
+
+    public List<Integer> getMyAnswers() {
+        return myAnswers;
+    }
+
+    public void setMyAnswers(List<Integer> myAnswers) {
+        this.myAnswers = myAnswers;
     }
 
     public List<Result> getResults() {

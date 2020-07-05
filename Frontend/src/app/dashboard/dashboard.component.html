@@ -1,0 +1,17 @@
+<div class="page">
+  <app-toolbar class="header"></app-toolbar>
+
+  <div class="content">
+    <div *ngIf="_content==='home'">
+      <app-homepage></app-homepage>
+    </div>
+    <div *ngIf="_content==='myProfile'">
+      <app-my-profile></app-my-profile>
+    </div>
+    <div *ngIf="_content==='planTrip'">
+      <app-plan-trip></app-plan-trip>
+    </div>
+  </div>
+
+
+</div>

@@ -1,33 +1,49 @@
 package rules;
 import sbnz.visitserbia.DTOs.ResponsesDTO
-import sbnz.visitserbia.DTOs.ResultDTO
+import sbnz.visitserbia.model.Result
+import sbnz.visitserbia.model.Budget
+import java.util.List;
+import sbnz.visitserbia.model.PartOfSerbia
+import sbnz.visitserbia.model.City
+import sbnz.visitserbia.model.AttractionType
+import sbnz.visitserbia.model.Attraction
 import sbnz.visitserbia.model.Budget
 
 rule "Low Budget Trip"
-    agenda-group "budget-rules"
     when
-        $result: ResultDTO()
+        $result: Result($attractions: attractions != null, tripBudget == null)
         $response: ResponsesDTO(tripBudget/numberOfTravelers/numberOfDays < 1000)
+        $matchingAttractions: List() from accumulate (
+                				$a: Attraction(attractionBudget == Budget.LOW) from $attractions,
+                				collectList($a)
+        )
     then
-        modify($result){setTripBudget(Budget.LOW)}
+        modify($result){
+            setTripBudget(Budget.LOW),
+            setAttractions($matchingAttractions)}
+        System.out.println("*RULE FIRED* Trip budget set to LOW");
 end
 
 rule "Medium Budget Trip"
-    agenda-group "budget-rules"
     when
-        $result: ResultDTO()
+        $result: Result($attractions: attractions != null, tripBudget == null)
         $response: ResponsesDTO(tripBudget/numberOfTravelers/numberOfDays >= 1000 && tripBudget/numberOfTravelers < 3000)
+        $matchingAttractions: List() from accumulate (
+                        				$a: Attraction(attractionBudget == Budget.LOW || attractionBudget == Budget.MEDIUM) from $attractions,
+                        				collectList($a)
+                )
     then
-        modify($result){setTripBudget(Budget.MEDIUM)}
+        modify($result){
+                    setTripBudget(Budget.MEDIUM),
+                    setAttractions($matchingAttractions)}
+        System.out.println("*RULE FIRED* Trip budget set to MEDIUM");
 end
 
-
 rule "High Budget Trip"
-    agenda-group "budget-rules"
     when
-        $result: ResultDTO()
+        $result: Result($attractions: attractions != null, tripBudget == null)
         $response: ResponsesDTO(tripBudget/numberOfTravelers/numberOfDays >= 3000)
     then
         modify($result){setTripBudget(Budget.HIGH)}
+        System.out.println("*RULE FIRED* Trip budget set to HIGH");
 end
-

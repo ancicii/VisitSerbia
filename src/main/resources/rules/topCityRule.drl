@@ -1,0 +1,9 @@
+package rules;
+dialect  "mvel"
+
+rule "topCityRule"
+    when
+
+
+    then
+end

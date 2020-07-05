@@ -1,0 +1,40 @@
+package rules;
+import sbnz.visitserbia.DTOs.ResponsesDTO
+import sbnz.visitserbia.model.Result
+import sbnz.visitserbia.model.Budget
+import java.util.List;
+import sbnz.visitserbia.model.PartOfSerbia
+import sbnz.visitserbia.model.City
+import sbnz.visitserbia.model.AttractionType
+import sbnz.visitserbia.model.Attraction
+import sbnz.visitserbia.model.Budget
+import sbnz.visitserbia.model.Season
+
+rule "Hot Season"
+    no-loop true
+    when
+        $result: Result(tripBudget != null, $attractions: attractions != null)
+        $response: ResponsesDTO(startDate.getMonth() in (5,6,7))
+        $matchingAttractions: List() from accumulate (
+            $a: Attraction(seasonToVisit != Season.COLD) from $attractions,
+            collectList($a)
+       )
+    then
+        modify($result){setAttractions($matchingAttractions)}
+        System.out.println("*RULE FIRED* set HOT season");
+end
+
+rule "Cold Season"
+    no-loop true
+    when
+        $result: Result(tripBudget != null, $attractions: attractions != null)
+        $response: ResponsesDTO(startDate.getMonth() in (0,1,11))
+        $matchingAttractions: List() from accumulate (
+                    $a: Attraction(seasonToVisit != Season.HOT) from $attractions,
+                    collectList($a)
+               )
+        then
+        modify($result){setAttractions($matchingAttractions)}
+        System.out.println("*RULE FIRED* set COLD season");
+end
+

@@ -1,0 +1,21 @@
+<mdb-card  cascade="true" narrower="true" class="narrower card card-cascade">
+  <div class="card card-cascade">
+    <div  class="view view-cascade gradient-card-header light-blue lighten-1">
+      <h4  class="h4-responsive">Edit your preferences:</h4>
+    </div>
+    <mdb-card-body  cascade="true" class="card-body-cascade card-body">
+        <div *ngFor="let question of questions; let i = index" [id]="question.id">
+          <label id="example-radio-group-label">{{i+1}}. {{question.question}}</label>
+          <mat-radio-group
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group text-center" [(ngModel)]="selectedAnswers[i]">
+            <mat-radio-button color="primary" class=" text-center example-radio-button" *ngFor="let answer of question.answers" [value]="answer.id">
+              {{answer.answerText}}
+
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div  class="text-center"><button class="btn btn-rounded purple-gradient" mdbBtn="" mdbWavesEffect="" rounded="true" type="button" (click)="onSubmit()"> Save </button></div>
+    </mdb-card-body>
+  </div>
+</mdb-card>

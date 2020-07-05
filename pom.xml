@@ -64,8 +64,8 @@
         </dependency>
         <dependency>
             <groupId>org.kie</groupId>
-            <artifactId>kie-internal</artifactId>
-            <version>7.38.0.Final</version>
+            <artifactId>kie-spring</artifactId>
+            <version>7.39.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.kie</groupId>
@@ -87,13 +87,6 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -13,21 +13,14 @@ public class Result {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attraction> attractions;
-    private Integer numberOfCities;
-    private Integer numberOfDays;
-    private double timeByDay;
     private TripGrade tripGrade;
     private Budget tripBudget;
 
     public Result() {
     }
 
-    public Result(List<Attraction> attractions, Integer numberOfCities, Integer numberOfDays, double timeByDay,
-                  TripGrade tripGrade, Budget tripBudget) {
+    public Result(List<Attraction> attractions, TripGrade tripGrade, Budget tripBudget) {
         this.attractions = attractions;
-        this.numberOfCities = numberOfCities;
-        this.numberOfDays = numberOfDays;
-        this.timeByDay = timeByDay;
         this.tripGrade = tripGrade;
         this.tripBudget = tripBudget;
 
@@ -47,30 +40,6 @@ public class Result {
 
     public void setAttractions(List<Attraction> attractions) {
         this.attractions = attractions;
-    }
-
-    public Integer getNumberOfCities() {
-        return numberOfCities;
-    }
-
-    public void setNumberOfCities(Integer numberOfCities) {
-        this.numberOfCities = numberOfCities;
-    }
-
-    public Integer getNumberOfDays() {
-        return numberOfDays;
-    }
-
-    public void setNumberOfDays(Integer numberOfDays) {
-        this.numberOfDays = numberOfDays;
-    }
-
-    public double getTimeByDay() {
-        return timeByDay;
-    }
-
-    public void setTimeByDay(double timeByDay) {
-        this.timeByDay = timeByDay;
     }
 
     public TripGrade getTripGrade() {

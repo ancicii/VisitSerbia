@@ -8,47 +8,31 @@ import sbnz.visitserbia.model.Attraction
 global ArrayList<Result> allResults;
 global ArrayList<Attraction> allAttractions;
 
-rule "Least popular attractions"
-    agenda-group "attraction-popularity-report"
-    when
-        $attractions: AttractionPopularityReportDTO()
-        $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
-                       from allAttractions,
-                       average($timesRecommended))
+query "Least popular attractions"
+    $mean: Number() from accumulate(
+        Attraction($timesRecommended: timesRecommended)
+        from allAttractions,
+        average($timesRecommended))
 
-        $leastPopular: ArrayList() from collect (
-          Attraction(timesRecommended < $mean) from allAttractions)
-    then
-        $attractions.setAttractions($leastPopular);
-        delete($attractions);
+    $leastPopular: ArrayList() from collect (
+        Attraction(timesRecommended < $mean) from allAttractions)
 end
 
-rule "Medium popular attractions"
-    agenda-group "attraction-popularity-report"
-    when
-        $attractions: AttractionPopularityReportDTO()
-        $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
-                       from allAttractions,
-                       average($timesRecommended))
+query "Medium popular attractions"
+    $mean: Number() from accumulate(
+        Attraction($timesRecommended: timesRecommended)
+        from allAttractions,
+        average($timesRecommended))
 
-        $mediumPopular: ArrayList() from collect (
-          Attraction(timesRecommended >= $mean, timesRecommended < 2*$mean) from allAttractions)
-    then
-        $attractions.setAttractions($mediumPopular);
-        delete($attractions);
+    $mediumPopular: ArrayList() from collect (
+        Attraction(timesRecommended >= $mean, timesRecommended < 2*$mean) from allAttractions)
 end
 
-rule "Most popular attractions"
-    agenda-group "attraction-popularity-report"
-    when
-        $attractions: AttractionPopularityReportDTO()
-        $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
-                       from allAttractions,
-                       average($timesRecommended))
+query "Most popular attractions"
+    $mean: Number() from accumulate( Attraction($timesRecommended: timesRecommended)
+        from allAttractions,
+        average($timesRecommended))
 
-        $mostPopular: ArrayList() from collect (
-          Attraction(timesRecommended >= 2*$mean) from allAttractions)
-    then
-        $attractions.setAttractions($mostPopular);
-        delete($attractions);
+    $mostPopular: ArrayList() from collect (
+        Attraction(timesRecommended >= 2*$mean) from allAttractions)
 end

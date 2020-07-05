@@ -1,0 +1,81 @@
+<mdb-card  cascade="true" narrower="true" class="narrower card card-cascade">
+  <div class="card card-cascade">
+    <div  class="view view-cascade gradient-card-header light-blue lighten-1">
+      <h4  class="h4-responsive">Edit your profile:</h4>
+    </div>
+    <mdb-card-body  cascade="true" class="text-center card-body-cascade card-body">
+      <form [formGroup]="ngForm" (ngSubmit)="onSubmit()" novalidate="" class="ng-untouched ng-pristine ng-valid">
+        <div  class="row">
+          <div  class="col-md-12">
+            <div  class="md-form"><input  class="form-control" id="email" mdbInput="" type="text" disabled="" formControlName="email">
+              <label  class="disabled" for="email">Email</label>
+            </div>
+          </div>
+        </div>
+        <div  class="row">
+          <div  class="col-md-6">
+            <div  class="md-form">
+              <input  class="form-control" id="firstName" mdbInput="" placeholder="First Name" type="text" formControlName="firstName">
+              <label  *ngIf="ngForm.controls.firstName.valid" class="active" for="firstName">First Name</label>
+              <label class ="error" *ngIf="ngForm.controls.firstName.invalid">Not a valid first name</label>
+            </div>
+          </div>
+          <div  class="col-md-6">
+            <div  class="md-form">
+              <input  class="form-control" id="lastName" mdbInput="" placeholder="Doe" type="text" formControlName="lastName">
+              <label  *ngIf="ngForm.controls.lastName.valid" class="active" for="lastName">Last Name</label>
+              <label class ="error" *ngIf="ngForm.controls.lastName.invalid">Not a valid last name</label>
+            </div>
+          </div>
+        </div>
+        <div  class="row">
+          <div  class="col-md-4">
+            <div  class="md-form">
+              <input  class="form-control" id="years" mdbInput="" placeholder="" type="number" formControlName="years">
+              <label  *ngIf="ngForm.controls.years.valid" class="active" for="years">Years</label>
+              <label class ="error" *ngIf="ngForm.controls.years.invalid">Not a valid number of years</label>
+            </div>
+          </div>
+          <div  class="col-md-4">
+            <div  class="md-form">
+              <select  class="form-control" id="maritalStatus"  formControlName="maritalStatus">
+                <option value="SINGLE">Single</option>
+                <option value="MARRIED">Married</option>
+                <option value="IN_A_RELATIONSHIP">In a relationship</option>
+              </select>
+              <label class="active" for="maritalStatus">Marital Status</label>
+            </div>
+          </div>
+          <div  class="col-md-4">
+            <div  class="md-form">
+              <input  class="form-control" id="noOfKids" mdbInput="" placeholder="" type="number" formControlName="numberOfKids">
+              <label  *ngIf="ngForm.controls.numberOfKids.valid" class="active" for="noOfKids">Number of kids</label>
+              <label class ="error" *ngIf="ngForm.controls.numberOfKids.invalid">Not a valid number of kids</label>
+            </div>
+          </div>
+        </div>
+        <div  class="row">
+          <div  class="col-md-4">
+            <div  class="md-form"><input  class="form-control" placeholder="" id="password" mdbInput="" type="password" formControlName="password">
+              <label for="password">Old Password</label>
+            </div>
+          </div>
+          <div  class="col-md-4">
+            <div  class="md-form"><input  class="form-control" id="newPassword" mdbInput="" type="password" formControlName="newPassword">
+              <label  *ngIf="ngForm.controls.newPassword.valid" class="active" for="newPassword">New Password</label>
+              <label class ="error" *ngIf="ngForm.controls.newPassword.invalid">Not a valid password</label>
+            </div>
+          </div>
+          <div  class="col-md-4">
+            <div  class="md-form"><input  class="form-control" id="newPassword2" mdbInput="" type="password" formControlName="newPassword2">
+              <label  *ngIf="ngForm.controls.newPassword2.valid && !ngForm.errors?.mismatchedPasswords" class="active" for="newPassword2">Repeat New Password</label>
+              <label class ="error" *ngIf="ngForm.controls.newPassword2.invalid">Not a valid password</label>
+              <label class ="error" *ngIf="ngForm.errors?.mismatchedPasswords">Passwords must match</label>
+            </div>
+          </div>
+        </div>
+        <div  class="text-center"><button [disabled]="!ngForm.valid" class="waves-light btn btn-rounded blue-gradient" gradient="blue" mdbBtn="" mdbWavesEffect="" rounded="true" type="submit"> Update </button></div>
+      </form>
+    </mdb-card-body>
+  </div>
+</mdb-card>

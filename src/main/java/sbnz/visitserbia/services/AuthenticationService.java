@@ -23,6 +23,7 @@ public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -48,6 +49,9 @@ public class AuthenticationService {
             regUser.setPassword(passwordEncoder.encode(user.getPassword()));
             regUser.setFirstName(user.getFirstName());
             regUser.setLastName(user.getLastName());
+            regUser.setMaritalStatus(MaritalStatus.valueOf(user.getMaritalStatus()));
+            regUser.setYears(user.getYears());
+            regUser.setNumberOfKids(user.getNumberOfKids());
             regUser.setVerified(false);
             List<Authority> authorities = new ArrayList<Authority>();
             Authority a = new Authority();
@@ -64,11 +68,19 @@ public class AuthenticationService {
     }
 
     public boolean verifyUser(String token) throws EntityNotFoundException {
+
+//        File file = new File("D:\\Faks\\VIII semestar - SBNZ\\Slike za SBNZ\\Vranje\\Dukat.jpg");
+//        byte[] picInBytes = new byte[(int) file.length()];
+//        FileInputStream fileInputStream = new FileInputStream(file);
+//        fileInputStream.read(picInBytes);
+//        fileInputStream.close();
+//        Attraction a = attractionRepository.getOne(1L);
+//        a.setImage(picInBytes);
         VerificationToken vt = verificationTokenRepository.findByToken(token);
         if(vt==null || vt.isExpired()){
             throw new EntityNotFoundException("The link is invalid or broken!");
         }
-        RegisteredUser u = userRepository.findByEmail(vt.getUser().getEmail());
+        User u = userRepository.findByEmail(vt.getUser().getEmail());
         u.setVerified(true);
         userRepository.save(u);
         return true;

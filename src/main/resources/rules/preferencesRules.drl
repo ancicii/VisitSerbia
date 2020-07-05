@@ -3,12 +3,36 @@ import sbnz.visitserbia.DTOs.AnswerDTO
 import sbnz.visitserbia.DTOs.ResponsesDTO
 import sbnz.visitserbia.model.AttractionType
 import sbnz.visitserbia.model.Attraction
+import sbnz.visitserbia.model.Result
+import sbnz.visitserbia.model.RegisteredUser
+import sbnz.visitserbia.model.UserPreference
+import sbnz.visitserbia.model.PreferenceEnum
+import sbnz.visitserbia.model.PartOfSerbia
+import sbnz.visitserbia.model.City
+import java.util.ArrayList;
+import java.util.List;
+
+global ArrayList<Attraction> allAttractions;
+
+rule "All attractions based on preferences"
+    when
+        $result: Result(attractions == null, tripBudget == null)
+        $response: ResponsesDTO($attractionTypes: attractionTypes, $partOfSerbia: partOfSerbia)
+        $matchingAttractions: List() from accumulate (
+        				$a: Attraction(city.partOfSerbia == $partOfSerbia, attractionType memberOf $attractionTypes) from allAttractions,
+        				collectList($a)
+        				)
+    then
+        modify($result){setAttractions($matchingAttractions)}
+        System.out.println("*RULE FIRED* Added Attractions based on preferences");
+end
 
 rule "Selected answer is NATURE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'NATURE', questionId == 1)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.NATURE ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.NATURE);
@@ -19,14 +43,15 @@ rule "Selected answer is NATURE"
         $response.addAttractionType(AttractionType.ACTIVITY);
         $response.removeAttractionType(AttractionType.NIGHT_CLUB);
         $response.removeAttractionType(AttractionType.CAFFE);
-
+        System.out.println("*RULE FIRED* Added Attraction Types for NATURE preference");
 end
 
 rule "Selected answer is CITY"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'CITY', questionId == 1)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.CITY ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.PARK);
@@ -38,13 +63,16 @@ rule "Selected answer is CITY"
         $response.removeAttractionType(AttractionType.MOUNTAIN);
         $response.removeAttractionType(AttractionType.VILLAGE);
         $response.removeAttractionType(AttractionType.ACTIVITY);
+
+        System.out.println("*RULE FIRED* Added Attraction Types for CITY preference");
 end
 
-rule "Selected answer is ANYWHERE"
+rule "Selected answer is ANYTHING"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'ANYTHING', questionId == 1)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.ANYTHING ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.PARK);
@@ -56,228 +84,282 @@ rule "Selected answer is ANYWHERE"
         $response.addAttractionType(AttractionType.MOUNTAIN);
         $response.addAttractionType(AttractionType.VILLAGE);
         $response.addAttractionType(AttractionType.ACTIVITY);
+        System.out.println("*RULE FIRED* Added Attraction Types for ANYTHING preference");
 end
 
 rule "Selected answer is FAST FOOD"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'FAST_FOOD', questionId == 2)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.FAST_FOOD ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
         $response.removeAttractionType(AttractionType.RESTAURANT);
         $response.addAttractionType(AttractionType.FAST_FOOD);
-
+        System.out.println("*RULE FIRED* Added Attraction Types for FAST_FOOD preference");
 end
 
 rule "Selected answer is TRADITIONAL KITCHEN RESTAURANT"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'TRADITIONAL_KITCHEN', questionId == 2)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.TRADITIONAL_KITCHEN ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.FAST_FOOD);
         $response.removeAttractionType(AttractionType.RESTAURANT);
         $response.addAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
+        System.out.println("*RULE FIRED* Added Attraction Types for TRADITIONAL_KITCHEN preference");
 end
 
 rule "Selected answer is RESTAURANTS"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'RESTAURANTS', questionId == 2)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.RESTAURANTS ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.RESTAURANT);
         $response.removeAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
         $response.removeAttractionType(AttractionType.FAST_FOOD);
 
+        System.out.println("*RULE FIRED* Added Attraction Types for RESTAURANTS preference");
 end
 
-rule "Selected answer for food is ANYWHERE"
+rule "Selected answer is ANYWHERE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'ANYTHING', questionId == 2)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.ANYWHERE ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.RESTAURANT);
         $response.addAttractionType(AttractionType.TRADITIONAL_KITCHEN_RESTAURANT);
         $response.addAttractionType(AttractionType.FAST_FOOD);
+
+        System.out.println("*RULE FIRED* Added Attraction Types for ANYWHERE preference");
 end
 
 rule "Selected answer INTERESTED IN CULTURE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'INTERESTED_IN_CULTURE', questionId == 3)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.INTERESTED_IN_CULTURE ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.HISTORICAL);
+        System.out.println("*RULE FIRED* Added Attraction Types for INTERESTED_IN_CULTURE preference");
 end
 
 rule "Selected answer NOT INTERESTED IN CULTURE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'NOT_INTERESTED_IN_CULTURE', questionId == 3)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.NOT_INTERESTED_IN_CULTURE ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.HISTORICAL);
+        System.out.println("*RULE FIRED* Added Attraction Types for NOT_INTERESTED_IN_CULTURE preference");
 end
 
 rule "Selected answer INTERESTED IN SHOPPING"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'SHOPPING_YES', questionId == 6)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.SHOPPING_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.SHOPPING_MALL);
+        System.out.println("*RULE FIRED* Added Attraction Types for SHOPPING_YES preference");
 end
 
 rule "Selected answer NOT INTERESTED IN SHOPPING"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'SHOPPING_NO', questionId == 6)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.SHOPPING_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.SHOPPING_MALL);
+        System.out.println("*RULE FIRED* Added Attraction Types for SHOPPING_NO preference");
 end
 
 rule "Selected answer INTERESTED IN CINEMA AND THEATRE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'CINEMA_AND_THEATRE_YES', questionId == 5)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.CINEMA_AND_THEATRE_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.CINEMA);
         $response.addAttractionType(AttractionType.THEATRE);
+        System.out.println("*RULE FIRED* Added Attraction Types for CINEMA_AND_THEATRE_YES preference");
 end
 
 rule "Selected answer NOT INTERESTED IN CINEMA AND THEATRE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'CINEMA_AND_THEATRE_NO', questionId == 5)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.CINEMA_AND_THEATRE_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.CINEMA);
         $response.removeAttractionType(AttractionType.THEATRE);
+        System.out.println("*RULE FIRED* Added Attraction Types for CINEMA_AND_THEATRE_NO preference");
 end
 
 rule "Selected answer LIKE ANIMALS"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'ANIMALS_YES', questionId == 7)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.ANIMALS_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.ZOO);
+        System.out.println("*RULE FIRED* Added Attraction Types for ANIMALS_YES preference");
 end
 
 rule "Selected answer DON'T LIKE ANIMALS"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'ANIMALS_NO', questionId == 7)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.ANIMALS_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.ZOO);
+        System.out.println("*RULE FIRED* Added Attraction Types for ANIMALS_NO preference");
 end
 
 rule "Selected answer LIKE WATER"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'WATER_YES', questionId == 8)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.WATER_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.SPA_RESORT);
         $response.addAttractionType(AttractionType.RIVER);
         $response.addAttractionType(AttractionType.LAKE);
+        System.out.println("*RULE FIRED* Added Attraction Types for WATER_YES preference");
 end
 
 rule "Selected answer DON'T LIKE WATER"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'WATER_NO', questionId == 8)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.WATER_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.SPA_RESORT);
         $response.removeAttractionType(AttractionType.RIVER);
         $response.removeAttractionType(AttractionType.LAKE);
+        System.out.println("*RULE FIRED* Added Attraction Types for WATER_NO preference");
 end
 
 rule "Selected answer INTERESTED IN MONASTERIES"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'MONASTERIES_YES', questionId == 9)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.MONASTERIES_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.MONASTERY);
         $response.addAttractionType(AttractionType.CHURCH);
         $response.addAttractionType(AttractionType.MOSQUE);
+        System.out.println("*RULE FIRED* Added Attraction Types for MONASTERIES_YES preference");
 end
 
 rule "Selected answer NOT INTERESTED IN MONASTERIES"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'MONASTERIES_NO', questionId == 9)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.MONASTERIES_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.MONASTERY);
         $response.removeAttractionType(AttractionType.CHURCH);
         $response.removeAttractionType(AttractionType.MOSQUE);
+        System.out.println("*RULE FIRED* Added Attraction Types for MONASTERIES_NO preference");
 end
 
 rule "Selected answer INTERESTED IN ART"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'ART_YES', questionId == 4)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.ART_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.MUSEUM);
         $response.addAttractionType(AttractionType.ART_GALLERY);
+        System.out.println("*RULE FIRED* Added Attraction Types for ART_YES preference");
 end
 
 rule "Selected answer NOT INTERESTED IN ART"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'ART_NO', questionId == 4)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.ART_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.MUSEUM);
         $response.removeAttractionType(AttractionType.ART_GALLERY);
+        System.out.println("*RULE FIRED* Added Attraction Types for ART_NO preference");
 end
 
 rule "Selected answer TO RELAX"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'REST_YES', questionId == 10)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.REST_YES ) from $preferences
         $response: ResponsesDTO()
     then
         $response.removeAttractionType(AttractionType.NIGHT_CLUB);
         $response.removeAttractionType(AttractionType.ACTIVITY);
+        System.out.println("*RULE FIRED* Added Attraction Types for REST_YES preference");
 end
 
 rule "Selected answer TO BE ACTIVE"
     agenda-group "questions"
     no-loop
     when
-        $answer: AnswerDTO(preference == 'REST_NO', questionId == 10)
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.REST_NO ) from $preferences
         $response: ResponsesDTO()
     then
         $response.addAttractionType(AttractionType.NIGHT_CLUB);
         $response.addAttractionType(AttractionType.ACTIVITY);
+        System.out.println("*RULE FIRED* Added Attraction Types for REST_NO preference");
+end
+
+rule "Selected answer is DOES NOT MATTER"
+    agenda-group "questions"
+    no-loop
+    when
+        RegisteredUser( $preferences: preferences )
+        UserPreference( preference == PreferenceEnum.DOES_NOT_MATTER ) from $preferences
+        $response: ResponsesDTO()
+    then
+        $response.addAttractionType(AttractionType.NIGHT_CLUB);
+        $response.addAttractionType(AttractionType.ACTIVITY);
+        System.out.println("*RULE FIRED* Added Attraction Types for DOES_NOT_MATTER preference");
 end

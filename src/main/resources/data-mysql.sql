@@ -13,51 +13,51 @@ SET SQL_SAFE_UPDATES = 0;
 SET NAMES 'utf8';
 USE visitserbia;
 --
--- Delete data from the table 'verification_token'
---
-TRUNCATE TABLE verification_token;
---
--- Delete data from the table 'user_preferences'
---
-TRUNCATE TABLE user_preferences;
---
--- Delete data from the table 'user_authority'
---
-TRUNCATE TABLE user_authority;
---
--- Delete data from the table 'answer'
---
-TRUNCATE TABLE answer;
---
--- Delete data from the table 'attraction'
---
-DELETE FROM attraction;
---
--- Delete data from the table 'question'
---
-DELETE FROM question;
---
--- Delete data from the table 'user'
---
-DELETE FROM user;
---
--- Delete data from the table 'authority'
---
-DELETE FROM authority;
---
--- Delete data from the table 'user_preference'
---
-DELETE FROM user_preference;
+# -- Delete data from the table 'verification_token'
+# --
+# TRUNCATE TABLE verification_token;
+# --
+# -- Delete data from the table 'user_preferences'
+# --
+# TRUNCATE TABLE user_preferences;
+# --
+# -- Delete data from the table 'user_authority'
+# --
+# TRUNCATE TABLE user_authority;
+# --
+# -- Delete data from the table 'answer'
+# --
+# TRUNCATE TABLE answer;
+# --
+# -- Delete data from the table 'attraction'
+# --
+# DELETE FROM attraction;
+# --
+# -- Delete data from the table 'question'
+# --
+# DELETE FROM question;
+# --
+# -- Delete data from the table 'user'
+# --
+# DELETE FROM user;
+# --
+# -- Delete data from the table 'authority'
+# --
+# DELETE FROM authority;
+# --
+# -- Delete data from the table 'user_preference'
+# --
+# DELETE FROM user_preference;
 --
 -- Inserting data into table authority
 --
-INSERT INTO authority(id, type) VALUES
+INSERT IGNORE INTO authority(id, type) VALUES
 (1, 'ROLE_ADMIN'),
 (2, 'ROLE_USER');
 --
 -- Inserting data into table question
 --
-INSERT INTO question(id, question) VALUES
+INSERT IGNORE INTO question(id, question) VALUES
 (1, 'Where do you imagine your ideal vacation?'),
 (2, 'Where do you prefer to eat?'),
 (3, 'Are you interested in culture?'),
@@ -71,7 +71,7 @@ INSERT INTO question(id, question) VALUES
 --
 -- Inserting data into table answer
 --
-INSERT INTO answer(id, answer_text, preference, question_id) VALUES
+INSERT IGNORE INTO answer(id, answer_text, preference, question_id) VALUES
 (1, 'City', 0, 1),
 (2, 'Nature', 1, 1),
 (3, 'Anywhere', 21, 1),
@@ -99,7 +99,7 @@ INSERT INTO answer(id, answer_text, preference, question_id) VALUES
 --
 -- Inserting data into table user (password for admin is admin, for registeredUser is user)
 --
-INSERT INTO user(id, dtype, email, first_name, is_verified, last_name, password, marital_status, number_of_kids, years) VALUES
+INSERT IGNORE INTO user(id, dtype, email, first_name, is_verified, last_name, password, marital_status, number_of_kids, years) VALUES
 (1, 'Admin', 'admin1@gmail.com', 'Ana', True, 'Pjevic', '$2y$12$XQ/i9L1DIn2HrSMSBbcnd.Ev0hc.S3iVy7P7AWnLmPpZbVh6fbY/q', null, null, null),
 (2, 'Admin', 'admin2@gmail.com', 'Maja', True, 'Pantic', '$2y$12$XQ/i9L1DIn2HrSMSBbcnd.Ev0hc.S3iVy7P7AWnLmPpZbVh6fbY/q', null, null, null),
 (3, 'RegisteredUser', 'reg1@gmail.com', 'Jovan', True, 'Jovanovic', '$2y$12$1Yfm8mhWBMnsDQqs6PWd.OgsKESuzsJa1tQFXt3mA7FlfwPEcpwiy', 0, 0, 25),
@@ -107,16 +107,79 @@ INSERT INTO user(id, dtype, email, first_name, is_verified, last_name, password,
 --
 -- Inserting data into table user_authority
 --
-INSERT INTO user_authority(user_id, authority_id) VALUES
+INSERT IGNORE INTO user_authority(user_id, authority_id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
 (4, 2);
---
--- Scripts to execute after
---
--- for MySQL
-TRUNCATE table hibernate_sequence;
-INSERT INTO hibernate_sequence (next_val) VALUES
-(11),(5);
+
+INSERT IGNORE INTO user_authority(user_id, authority_id) VALUES
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 2);
+
+INSERT IGNORE INTO city(id, name, part_of_serbia) VALUES
+(1, 'Užice', 3),
+(2, 'Čačak', 3),
+(3, 'Kragujevac', 3),
+(4, 'Zaječar', 0),
+(5, 'Bor', 0),
+(6, 'Negotin', 0),
+(7, 'Beograd', 2),
+(8, 'Novi Sad', 2),
+(9, 'Subotica', 2),
+(10, 'Niš', 1),
+(11, 'Vranje', 1),
+(12, 'Leskovac', 1);
+
+INSERT IGNORE INTO attraction(id, attraction_budget, attraction_type, name, season_to_visit, time_to_spend, times_recommended, city_id, image) VALUES
+(1, 0, 17, 'Stara Srbija', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Stara Srbija.jpg')),
+(2, 0, 17, 'Nišlijska Mehana', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Nislijska Mehana.jpg')),
+(3, 0, 16, 'The Regent Club', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/The Regent Club.jpg')),
+(4, 0, 16, 'Gril', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Restoran Gril.jpg')),
+(5, 0, 15, 'McDonald\'s', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/McDonalds.jpg')),
+(6, 0, 15, 'Good Food', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/The Good Food.jpg')),
+(7, 0, 1, 'Čegar', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Cegar.jpg')),
+(8, 0, 1, 'Ćele kula', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Cele kula.jpg')),
+(9, 0, 1, 'Niška tvrđava', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Niska tvrdjava.jpg')),
+(10, 0, 1, 'Medijana', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Medijana.jpg')),
+(11, 0, 1, 'Koncentracioni logor na Crvenom krstu', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Koncentracioni logor crveni krst.jpg')),
+(12, 0, 11, 'Crkva Sv Pantelejmona', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Crkva Sv Pantelejmona.jpg')),
+(13, 0, 7, 'Čair', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Park Cair.jpg')),
+(14, 1, 18, 'Taboo', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Taboo.jpg')),
+(15, 1, 18, 'Julijan Djupon', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Julijan Djupon.jpg')),
+(16, 1, 19, 'Irish Pub Crazy Horse', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Irish pub crazy horse.jpg')),
+(17, 1, 19, 'Saloon', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Saloon.jpg')),
+(18, 1, 20, 'Vilin grad', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Bioskop Vilin grad.jpg')),
+(19, 1, 21, 'Pozorište lutaka', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Pozoriste lutaka.jpg')),
+(20, 1, 21, 'Narodno pozorište', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Narodno pozoriste.jpg')),
+(21, 1, 22, 'Forum Shopping Center', 2, 120, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Forum shopping center.jpg')),
+(22, 1, 9, 'Galerija savremene likovne umetnosti', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Galerija.jpg')),
+(23, 1, 8, 'Narodni muzej', 2, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Narodni muzej.jpg')),
+(24, 2, 24, 'Jahanje', 0, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Jahanje.jpg')),
+(25, 2, 24, 'Rafting na Nišavi', 0, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Rafting na Nisavi.jpg')),
+(26, 2, 24, 'Jeep Safari', 0, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Jeep safari.jpg')),
+(27, 0, 24, 'Planinarenje - Suva planina', 2, 120, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Planinarenje.jpg')),
+(28, 1, 24, 'Free climbing - Jelašnička klisura', 0, 90, 0, 10, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Nis/Free climbing.jpg')),
+(29, 1, 17, 'Gradska Meana', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Gradska meana.jpg')),
+(30, 1, 17, 'Kod bake na ručak', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Kod bake na rucak.jpg')),
+(31, 1, 16, 'Stari bunar', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Stari Bunar.jpg')),
+(32, 1, 16, 'Dukat', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Dukat.jpg')),
+(33, 1, 15, 'Santos', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Santos.jpg')),
+(34, 1, 15, 'Brzi gonzales 017', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Brzi gonzales 017.jpg')),
+(35, 1, 8, 'Kuća Bore Stankovića', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Kuca Bore Stankovica.jpg')),
+(36, 1, 0, 'Beli most', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Beli most.jpg')),
+(37, 1, 0, 'Markovo kale', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Markovo kale.jpg')),
+(38, 1, 11, 'Crkva Svete Petke', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Crkva Svete Petke.png')),
+(39, 1, 7, 'Gradski park', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Gradski park.jpg')),
+(40, 1, 18, 'Majestic', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Majestic.jpg')),
+(41, 1, 19, 'Korzo caffe & bar', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Korzo.jpg')),
+(42, 1, 19, 'Cafe Cafe', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Cafe Cafe.jpg')),
+(43, 1, 21, 'Pozorište Bora Stanković', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Pozoriste Bora Stankovic.jpg')),
+(44, 1, 8, 'Narodni muzej', 0, 90, 0, 11, LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Slike za SBNZ/Vranje/Narodni muzej.jpg'));
+
+
+
+
 

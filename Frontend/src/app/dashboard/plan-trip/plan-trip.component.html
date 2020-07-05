@@ -1,0 +1,55 @@
+<div class="main-div">
+  <mat-card>
+    <mat-card-title style="margin-bottom:25px; margin-top: 85px">Plan your trip</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="ngForm" (ngSubmit)="onSubmit()">
+        <p>
+          <mat-form-field>
+            <mat-label>Part of Serbia</mat-label>
+            <mat-select id="partOfSerbia"  formControlName="partOfSerbia">
+              <mat-option value="EASTERN">East Serbia</mat-option>
+              <mat-option value="SOUTHERN">South Serbia</mat-option>
+              <mat-option value="NORTHERN">Vojvodina and Belgrade</mat-option>
+              <mat-option value="WESTERN">West Serbia and Sumadija</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </p>
+        <p>
+        <mat-form-field>
+            <input matInput readonly
+                   placeholder="Choose a date"
+                   [satDatepicker]="picker"
+                   formControlName="date"
+                   [ngModel]="dateRange"
+                   [min]="todayDate"
+                >
+
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+            <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+
+        </mat-form-field>
+           </p>
+        <label class ="error" *ngIf="ngForm.errors?.moreThanFiveDays">Maximum number of days is five</label>
+
+        <p>
+          <mat-form-field>
+            <input type="number" min="1" max="10" matInput placeholder="Number of passengers" formControlName="noOfPassengers">
+            <mat-error *ngIf="ngForm.controls.noOfPassengers.invalid">Number of passengers must be between 1 and 10.</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field>
+            <span matPrefix>RSD&nbsp;&nbsp;</span>
+            <input type="number" min="0" matInput placeholder="Your budget for the trip (for all days)" formControlName="budget">
+            <mat-error *ngIf="ngForm.controls.budget.invalid">Budget must be positive value.</mat-error>
+          </mat-form-field>
+        </p>
+
+        <div class="button">
+          <button type="submit" [disabled]="!ngForm.valid" mat-button>Generate Plan</button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
